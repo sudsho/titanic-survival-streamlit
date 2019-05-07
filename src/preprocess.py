@@ -15,3 +15,16 @@ def basic_clean(df):
         if c in df.columns:
             df = df.drop(columns=[c])
     return df
+
+
+def fill_age(df):
+    # use median by sex+pclass for plausibility
+    if "Age" not in df.columns:
+        return df
+    df = df.copy()
+    df["Age"] = df.groupby(["Sex", "Pclass"])["Age"].transform(
+        lambda x: x.fillna(x.median())
+    )
+    # any leftovers, use overall median
+    df["Age"] = df["Age"].fillna(df["Age"].median())
+    return df
