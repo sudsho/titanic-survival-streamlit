@@ -41,3 +41,19 @@ def encode_embarked(df):
     df["Embarked"] = df["Embarked"].fillna("S")
     df["Embarked"] = df["Embarked"].map({"S": 0, "C": 1, "Q": 2})
     return df
+
+
+def fill_fare(df):
+    df = df.copy()
+    if "Fare" in df.columns:
+        df["Fare"] = df["Fare"].fillna(df["Fare"].median())
+    return df
+
+
+def make_features(df):
+    df = basic_clean(df)
+    df = fill_age(df)
+    df = encode_sex(df)
+    df = encode_embarked(df)
+    df = fill_fare(df)
+    return df
