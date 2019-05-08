@@ -28,3 +28,16 @@ def fill_age(df):
     # any leftovers, use overall median
     df["Age"] = df["Age"].fillna(df["Age"].median())
     return df
+
+
+def encode_sex(df):
+    df = df.copy()
+    df["Sex"] = df["Sex"].map({"male": 0, "female": 1})
+    return df
+
+
+def encode_embarked(df):
+    df = df.copy()
+    df["Embarked"] = df["Embarked"].fillna("S")
+    df["Embarked"] = df["Embarked"].map({"S": 0, "C": 1, "Q": 2})
+    return df
