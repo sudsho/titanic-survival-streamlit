@@ -1,0 +1,36 @@
+"""Train the titanic model."""
+import argparse
+import logging
+from sklearn.model_selection import train_test_split
+from src.preprocess import load_csv, make_features
+from src.model import build_model
+from src.utils import load_config
+
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+log = logging.getLogger(__name__)
+
+
+def main(cfg_path):
+    cfg = load_config(cfg_path)
+    df = load_csv(cfg["data"]["train_csv"])
+    df = make_features(df)
+    y = df["Survived"].values
+    X = df.drop(columns=["Survived"]).values
+    X_tr, X_te, y_tr, y_te = train_test_split(
+        X, y,
+        test_size=cfg["data"]["test_size"],
+        random_state=cfg["data"]["random_state"],
+        stratify=y,
+    )
+    model = build_model(cfg)
+    model.fit(X_tr, y_tr)
+    log.info("train acc: %.3f", model.score(X_tr, y_tr))
+    log.info("test acc: %.3f", model.score(X_te, y_te))
+
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("--config", default="configs/default.yaml")
+    args = p.parse_args()
+    main(args.config)
