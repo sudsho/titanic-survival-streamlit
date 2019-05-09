@@ -1,10 +1,11 @@
 """Train the titanic model."""
 import argparse
 import logging
+import joblib
 from sklearn.model_selection import train_test_split
 from src.preprocess import load_csv, make_features
 from src.model import build_model
-from src.utils import load_config
+from src.utils import load_config, ensure_dir
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -16,7 +17,8 @@ def main(cfg_path):
     df = load_csv(cfg["data"]["train_csv"])
     df = make_features(df)
     y = df["Survived"].values
-    X = df.drop(columns=["Survived"]).values
+    feat_cols = [c for c in df.columns if c != "Survived"]
+    X = df[feat_cols].values
     X_tr, X_te, y_tr, y_te = train_test_split(
         X, y,
         test_size=cfg["data"]["test_size"],
@@ -27,6 +29,11 @@ def main(cfg_path):
     model.fit(X_tr, y_tr)
     log.info("train acc: %.3f", model.score(X_tr, y_tr))
     log.info("test acc: %.3f", model.score(X_te, y_te))
+
+    out = cfg["artifacts"]["model_path"]
+    ensure_dir(out)
+    joblib.dump({"model": model, "feat_cols": feat_cols}, out)
+    log.info("saved model -> %s", out)
 
 
 if __name__ == "__main__":
