@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Titanic Survival Predictor</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>Titanic Survival Predictor</h1>
+  <p>Enter passenger info and we'll predict survival probability.</p>
+  <form method="POST" action="/predict">
+    <label>Pclass:
+      <select name="Pclass">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+      </select>
+    </label><br>
+    <label>Sex:
+      <select name="Sex">
+        <option value="male">male</option>
+        <option value="female">female</option>
+      </select>
+    </label><br>
+    <label>Age: <input type="number" step="0.1" name="Age" value="30"></label><br>
+    <label>SibSp: <input type="number" name="SibSp" value="0"></label><br>
+    <label>Parch: <input type="number" name="Parch" value="0"></label><br>
+    <label>Fare: <input type="number" step="0.01" name="Fare" value="32"></label><br>
+    <label>Embarked:
+      <select name="Embarked">
+        <option value="S" selected>S</option>
+        <option value="C">C</option>
+        <option value="Q">Q</option>
+      </select>
+    </label><br>
+    <button type="submit">Predict</button>
+  </form>
+</body>
+</html>
