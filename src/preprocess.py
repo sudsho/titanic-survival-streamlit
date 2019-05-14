@@ -50,10 +50,19 @@ def fill_fare(df):
     return df
 
 
+def add_family_size(df):
+    df = df.copy()
+    if "SibSp" in df.columns and "Parch" in df.columns:
+        df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
+        df["IsAlone"] = (df["FamilySize"] == 1).astype(int)
+    return df
+
+
 def make_features(df):
     df = basic_clean(df)
     df = fill_age(df)
     df = encode_sex(df)
     df = encode_embarked(df)
     df = fill_fare(df)
+    df = add_family_size(df)
     return df
