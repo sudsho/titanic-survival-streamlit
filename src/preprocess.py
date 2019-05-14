@@ -8,8 +8,21 @@ def load_csv(path):
     return df
 
 
+def extract_title(df):
+    df = df.copy()
+    if "Name" in df.columns:
+        df["Title"] = df["Name"].str.extract(r" ([A-Za-z]+)\.", expand=False)
+        common = {"Mr", "Mrs", "Miss", "Master"}
+        df["Title"] = df["Title"].where(df["Title"].isin(common), "Rare")
+        df["Title"] = df["Title"].fillna("Rare")
+        df["Title"] = df["Title"].map(
+            {"Mr": 0, "Mrs": 1, "Miss": 2, "Master": 3, "Rare": 4}
+        )
+    return df
+
+
 def basic_clean(df):
-    # drop columns we won't use
+    # drop columns we won't use (Name handled by extract_title before this)
     cols_to_drop = ["PassengerId", "Name", "Ticket", "Cabin"]
     for c in cols_to_drop:
         if c in df.columns:
@@ -59,6 +72,7 @@ def add_family_size(df):
 
 
 def make_features(df):
+    df = extract_title(df)
     df = basic_clean(df)
     df = fill_age(df)
     df = encode_sex(df)
