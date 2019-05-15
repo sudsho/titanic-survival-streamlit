@@ -1,8 +1,12 @@
 """Flask app for titanic survival prediction."""
 import os
+import numpy as np
+import pandas as pd
 from flask import Flask, render_template, request
 from src.utils import load_config
-from src.predict import load_artifacts, predict_one
+from src.predict import load_artifacts
+from src.preprocess import make_features
+from src.explain import force_plot_png
 
 
 app = Flask(__name__)
@@ -35,13 +39,20 @@ def predict():
         "Fare": float(request.form["Fare"]),
         "Embarked": request.form["Embarked"],
     }
-    pred, proba = predict_one(art["model"], art["feat_cols"], record)
+    df = pd.DataFrame([record])
+    df = make_features(df)
+    feat_cols = art["feat_cols"]
+    df = df.reindex(columns=feat_cols, fill_value=0)
+    X = df.values.astype(float)
+    proba = float(art["model"].predict_proba(X)[0][1])
+    pred = int(proba >= 0.5)
     pred_label = "Survived" if pred == 1 else "Did not survive"
+    img = force_plot_png(art["model"], feat_cols, X[0])
     return render_template(
         "result.html",
         pred_label=pred_label,
         proba=proba,
-        shap_img=None,
+        shap_img=img,
     )
 
 
