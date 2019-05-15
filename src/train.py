@@ -2,7 +2,7 @@
 import argparse
 import logging
 import joblib
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from src.preprocess import load_csv, make_features
 from src.model import build_model
 from src.utils import load_config, ensure_dir
@@ -27,6 +27,8 @@ def main(cfg_path):
         stratify=y,
     )
     model = build_model(cfg)
+    cv_scores = cross_val_score(model, X_tr, y_tr, cv=5)
+    log.info("5-fold cv acc: %.3f +/- %.3f", cv_scores.mean(), cv_scores.std())
     model.fit(X_tr, y_tr)
     log.info("train acc: %.3f", model.score(X_tr, y_tr))
     log.info("test acc: %.3f", model.score(X_te, y_te))
