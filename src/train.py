@@ -30,6 +30,7 @@ def main(cfg_path):
     model.fit(X_tr, y_tr)
     log.info("train acc: %.3f", model.score(X_tr, y_tr))
     log.info("test acc: %.3f", model.score(X_te, y_te))
+    log.info("feature columns: %s", feat_cols)
 
     y_pred = model.predict(X_te)
     y_proba = model.predict_proba(X_te)[:, 1]
