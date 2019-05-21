@@ -5,8 +5,8 @@ data:
 
 model:
   type: random_forest
-  n_estimators: 200
-  max_depth: 7
+  n_estimators: 300
+  max_depth: 8
   min_samples_split: 4
   min_samples_leaf: 2
 
