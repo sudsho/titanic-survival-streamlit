@@ -3,6 +3,10 @@ import pandas as pd
 import numpy as np
 
 
+NUMERIC_COLS = ["Age", "Fare", "SibSp", "Parch"]
+CATEGORICAL_COLS = ["Sex", "Embarked", "Pclass"]
+
+
 def load_csv(path):
     df = pd.read_csv(path)
     return df
