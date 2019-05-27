@@ -15,7 +15,8 @@ def load_csv(path):
 def extract_title(df):
     df = df.copy()
     if "Name" in df.columns:
-        df["Title"] = df["Name"].str.extract(r" ([A-Za-z]+)\.", expand=False)
+        names = df["Name"].astype(str)
+        df["Title"] = names.str.extract(r" ([A-Za-z]+)\.", expand=False)
         common = {"Mr", "Mrs", "Miss", "Master"}
         df["Title"] = df["Title"].where(df["Title"].isin(common), "Rare")
         df["Title"] = df["Title"].fillna("Rare")
