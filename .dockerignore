@@ -1,0 +1,11 @@
+.git
+__pycache__/
+*.pyc
+.venv/
+.idea/
+.vscode/
+notebooks/
+data/raw/
+data/processed/
+*.log
+.env
