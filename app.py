@@ -27,6 +27,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/health")
+def health():
+    return {"status": "ok"}
+
+
 @app.route("/predict", methods=["POST"])
 def predict():
     art = get_artifacts()
