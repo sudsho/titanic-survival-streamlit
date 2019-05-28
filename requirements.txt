@@ -4,5 +4,6 @@ pandas==0.24.2
 numpy==1.16.4
 matplotlib==3.1.0
 shap==0.30.0
-joblib
+joblib==0.13.2
 PyYAML==5.1
+gunicorn==19.9.0
