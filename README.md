@@ -65,4 +65,11 @@ templates/, static/     HTML form + result page + CSS
 tests/                  pytest unit tests
 notebooks/              EDA, feature importance
 data/train.csv          small slice of the Kaggle Titanic train set
+Procfile, runtime.txt   Heroku deploy
+Dockerfile, heroku.yml  Container deploy
+.travis.yml             CI
 ```
+
+## License
+
+MIT.
