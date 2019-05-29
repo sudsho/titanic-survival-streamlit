@@ -1,6 +1,10 @@
 # titanic-survival-streamlit
 
+[![Build Status](https://travis-ci.org/sudsho/titanic-survival-streamlit.svg?branch=master)](https://travis-ci.org/sudsho/titanic-survival-streamlit)
+
 Predict survival on the Titanic using the classic Kaggle dataset, with a small Flask web dashboard and SHAP explanations for each prediction.
+
+> Note: the repo is named *streamlit* but the dashboard is built with Flask + matplotlib (Streamlit's first public release was Oct 2019, after this project was started).
 
 ## Problem
 
@@ -40,6 +44,16 @@ heroku create titanic-survival-<your-handle>
 git push heroku master
 heroku open
 ```
+
+A live demo (when up) lives at `https://titanic-survival-<your-handle>.herokuapp.com`. There's a Dockerfile too for container-based deploys.
+
+## Tests
+
+```
+pytest -q
+```
+
+Travis CI runs the test suite on each push (Python 3.6 and 3.7).
 
 ## Layout
 
