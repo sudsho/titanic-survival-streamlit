@@ -24,3 +24,7 @@ features:
 artifacts:
   model_path: artifacts/model.pkl
   preproc_path: artifacts/preproc.pkl
+
+serve:
+  host: 0.0.0.0
+  port: 5000
