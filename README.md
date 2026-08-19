@@ -6,6 +6,42 @@ Predict survival on the Titanic using the classic Kaggle dataset, with a small F
 
 > Note: the repo is named *streamlit* but the dashboard is built with Flask + matplotlib (Streamlit's first public release was Oct 2019, after this project was started).
 
+## Quick start (runs offline)
+
+No network or download needed. A small slice of the Kaggle Titanic train set is committed at `data/train.csv`, so the smoke trains and exercises the full predict path out of the box (the smoke falls back to a synthetic Titanic-schema dataframe if that CSV is ever removed).
+
+```
+python scripts/smoke.py
+```
+
+Real output on Python 3.11 (scikit-learn 1.8, shap 0.51):
+
+```
+============================================================
+Titanic survival - offline smoke test
+============================================================
+[data] using bundled CSV: data/train.csv  (80 rows)
+
+[train] fitting classifier: random_forest
+[train] train accuracy : 0.938
+[train] test accuracy  : 0.625
+[train] test roc_auc   : 0.683
+[train] feature cols   : ['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Title', 'FamilySize', 'IsAlone']
+[train] saved model    : artifacts\model.pkl
+
+[serve] predict_one(sample) -> pred=0  proba=0.0377
+[serve] GET /health -> 200 {'status': 'ok'}
+[serve] POST /predict -> 200 (rendered label + SHAP chart)
+
+============================================================
+SMOKE PASSED
+============================================================
+```
+
+The smoke trains the classifier (prints accuracy and ROC AUC), then exercises both the `predict_one` helper and the Flask `POST /predict` route through the app's test client, so the make_features, prediction, and SHAP explanation path all run headless. It does not launch the web server. `make smoke` runs the same thing.
+
+The metrics above come from the 80-row committed slice, so they are illustrative only; on the full Kaggle train set the RandomForest reaches roughly 0.82 5-fold CV accuracy.
+
 ## Problem
 
 Given passenger info (age, sex, class, fare, etc.), predict the probability that they survived the sinking of the Titanic. Surface which features pushed the prediction up or down.

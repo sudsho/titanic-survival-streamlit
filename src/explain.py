@@ -15,9 +15,13 @@ def make_explainer(model):
 def shap_values_for(model, X):
     expl = make_explainer(model)
     sv = expl.shap_values(X)
-    # for binary classification TreeExplainer returns a list of two arrays
+    # binary classification TreeExplainer output has changed across shap
+    # versions: older shap returned a list [class0, class1] of 2D arrays,
+    # newer shap returns a single 3D array (n_samples, n_features, n_classes).
     if isinstance(sv, list):
         sv = sv[1]
+    elif isinstance(sv, np.ndarray) and sv.ndim == 3:
+        sv = sv[:, :, 1]
     return expl, sv
 
 
